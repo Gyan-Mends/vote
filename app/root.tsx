@@ -6,18 +6,24 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useActionData,
 } from "@remix-run/react";
 import { NextUIProvider } from "@nextui-org/react";
-
+import { ThemeProvider } from "next-themes";
 import styles from "~/style.css";
+
+
+
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
-import { Toaster } from "react-hot-toast";
-import { FlashSessionInterface, getFlashSession } from "./flash-session";
-import { useEffect } from "react";
+export const loader: LoaderFunction = async () => {
+  return {}; // any initial data you want to load
+};
 
 export default function App() {
- 
+
+
+
   return (
     <html lang="en">
       <head>
@@ -27,10 +33,11 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <NextUIProvider>
-          <Outlet />
-        </NextUIProvider>
-        <Toaster position="bottom-right" />
+        <ThemeProvider defaultTheme="dark" attribute="class">
+          <NextUIProvider>
+            <Outlet  />
+          </NextUIProvider>
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -38,10 +45,3 @@ export default function App() {
     </html>
   );
 }
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const flashSession = await getFlashSession(request.headers.get("Cookie"));
-  const alert = flashSession || {};
-
-  return { flashSessionx: alert.data.__flash_alert__ };
-};

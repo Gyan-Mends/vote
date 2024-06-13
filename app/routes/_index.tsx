@@ -1,7 +1,24 @@
+import { Button } from "@nextui-org/react";
+import { useTheme } from "next-themes"
+
 const Home = () => {
+    //theme
+    const {theme, setTheme} = useTheme();
+
     return (
-        <div>
-            <h1>Home</h1>
+<div className={` h-screen transition duration-500 `}>
+<Button
+            onPress={() => {
+                setTheme(
+                    theme === "dark" ? "light" : "dark"
+                )
+            }}
+            >
+                {
+                    theme ==="dark"  ? "dark" : "Light"
+                }
+            </Button>
+            <p className="dark:text-primary-dark">This is Gyan</p>
         </div>
     )
 }

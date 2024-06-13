@@ -20,14 +20,14 @@ if (!secret) {
 }
 
 
-export const { getSession, commitSession, destroySession } =  createCookieSessionStorage<SessionData, SessionFlashData>({
-    // a Cookie from `createCookie` or the CookieOptions to create one
-    cookie: {
-      name: "psgh-admion-session",
-      httpOnly: true,
-      maxAge: 60 * 60 * 45,
-      path: "/",
-      sameSite: "lax",
-      secrets: [secret],
-    },
-  });
+export const { getSession, commitSession, destroySession } = createCookieSessionStorage<SessionData, SessionFlashData>({
+  // a Cookie from `createCookie` or the CookieOptions to create one
+  cookie: {
+    name: "psgh-admion-session",
+    httpOnly: true,
+    maxAge: 60 * 60 * 45,
+    path: "/",
+    sameSite: "lax",
+    secrets: [secret],
+  },
+});

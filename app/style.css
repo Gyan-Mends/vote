@@ -4,5 +4,5 @@
 
 @font-face {
     font-family: 'poppins';
-    src: url('./assets/fonts/Poppins-Medium.ttf') format('ttf');
+    src: url('./components/fonts/Poppins-Regular.ttf') format('ttf');
   } 
