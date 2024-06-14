@@ -128,7 +128,7 @@ export const action: ActionFunction = async ({ request }) => {
             session.set("email", email);
 
             // Redirect to a protected route or home page after successful login
-            return redirect("/protected-route", {
+            return redirect("/admin/", {
                 headers: {
                     "Set-Cookie": await commitSession(session),
                 },
