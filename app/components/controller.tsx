@@ -28,23 +28,6 @@ export async function saveRegistration(name: string, email: string, password: st
   }
 }
 
-// Login contoller
-// Login contoller
-export async function loginController(email:string, password:string){
-  try {
-    //checking if email and password exist
-    const loginValidation = await Registration.findOne({email, password})
 
-    // returning message when email and password does not exist
-    if(!loginController){
-      throw new Error("Inavalid email or password")
-    }else{
-      return redirect("/register")
-    }
-
-  } catch (error:any) {
-    throw new Error(error.message)
-  }
-}
 
 

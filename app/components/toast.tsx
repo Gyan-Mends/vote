@@ -1,5 +1,6 @@
-import toast, { ErrorIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import CheckedIcon from "./icons/CheckedIcon";
+import ErrorIcon from "./icons/ErrorIcon";
 
 export const errorToast = (message: string) => {
     return toast(

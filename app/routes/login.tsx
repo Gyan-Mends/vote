@@ -1,19 +1,36 @@
 import { Button, Checkbox, Input } from "@nextui-org/react"
-import { ActionFunction } from "@remix-run/node";
-import { Form, Link } from "@remix-run/react";
+import { ActionFunction, json, redirect } from "@remix-run/node";
+import { Form, Link, useActionData } from "@remix-run/react";
 import { useTheme } from "next-themes"
 import illustration from "~/components/illustration/Voting-amico-removebg.png"
 import MoonIcon from "~/components/icons/MoonIcon";
 import SunIcon from "~/components/icons/SunIcon";
-import { loginController } from "~/components/controller";
-import { getSession } from "~/session";
+import { commitSession, getSession } from "~/session";
+import Registration from "~/modal/registration";
+import { errorToast, successToast } from "~/components/toast";
+import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import bcrypt from "bcryptjs";
+
 
 const Login = () => {
     const { theme, setTheme } = useTheme();
+    const actionData = useActionData<any>();
+
+    useEffect(() => {
+        if (actionData) {
+            if (actionData.error) {
+                successToast(actionData.message);
+            } else {
+                errorToast(actionData.message);
+            }
+        }
+    }, [actionData]);
 
     return (
         <div className={`lg:grid lg:grid-cols-2 md:grid md:grid-cols-2 transition duration-500 lg:h-[100vh] lg:overflow-y-hidden  ${theme === "dark" ? "bg-slate-950" : "bg-white"}`}>
             {/* login form */}
+            <Toaster position="top-center" />
 
             <div className="flex flex-col justify-center items-center relative px-2 py-40 lg:px-0 lg:py-0">
                 <div>
@@ -27,12 +44,12 @@ const Login = () => {
                         {
                             theme === "light" ? (
                                 <>
-                                    <SunIcon className=""/>
+                                    <SunIcon className="" />
 
                                 </>
                             ) : (
                                 <>
-                                <MoonIcon className="text-slate-950"/>
+                                    <MoonIcon className="text-slate-950" />
                                 </>
                             )
                         }
@@ -96,19 +113,31 @@ const Login = () => {
 
 export default Login
 
+
 export const action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
-    const email = formData.get("email");
-    const password = formData.get("password")
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
+    // Check if user exists
     try {
-        // session
-        const session = await getSession(request.headers.get("Cookie"));
-        const token = session.get("email")
+        const user = await Registration.findOne({ email });
 
-        const LoginController  = await loginController(email:token, password);
+        if (user && await bcrypt.compare(password, user.password)) {
+            const session = await getSession(request.headers.get("Cookie"));
+            session.set("email", email);
+
+            // Redirect to a protected route or home page after successful login
+            return redirect("/protected-route", {
+                headers: {
+                    "Set-Cookie": await commitSession(session),
+                },
+
+            });
+        } else {
+            return json({ message: "Invalid email or password", success: false }, { status: 400 });
+        }
     } catch (error) {
-        
+        return json({ message: "An error occurred", success: false }, { status: 500 });
     }
-    
-}
+};
