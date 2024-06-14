@@ -10,6 +10,7 @@ import EventIcon from "~/components/icons/EventsIcon";
 import LogoutIcon from "~/components/icons/LogoutIcon";
 import MoonIcon from "~/components/icons/MoonIcon";
 import NavTogglerIcon from "~/components/icons/NavTogglerIcon";
+import ResultIcon from "~/components/icons/ResultIcon";
 import SunIcon from "~/components/icons/SunIcon";
 import UserIcon from "~/components/icons/UserIcon";
 import logo from "~/components/illustration/logo.png"
@@ -28,7 +29,7 @@ const AdminLayout = ({ children, pageName }: { children: ReactNode; pageName: st
     };
 
     return (
-        <div className={`h-[100vh] transition duration-500 ${theme === "light" ? "bg-white" : "bg-slate-950"}`}>
+        <div className={`lg:h-[100vh]  transition duration-500 ${theme === "light" ? "bg-gray-200" : "bg-slate-950"}`}>
             {/* Desktop Side Navigation Bar */}
             <div className={`h-full hidden lg:block md:block w-64 bg-primary text-white fixed transition-transform duration-500 p-6 ${desktopNav ? "transform-none" : "-translate-x-full"}`}>
                 {/* logo */}
@@ -82,7 +83,7 @@ const AdminLayout = ({ children, pageName }: { children: ReactNode; pageName: st
                     </Link>
                     <Link className=" " to="">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
-                            <DashboardIcon className="h-6 w-6"/>
+                            <ResultIcon className="h-6 w-6"/>
                             Results
                             </li>
                     </Link>
@@ -90,16 +91,73 @@ const AdminLayout = ({ children, pageName }: { children: ReactNode; pageName: st
             </div>
 
             {/* Mobile Side Navigation Bar */}
-            <div className={`h-full lg:hidden md:hidden w-64 bg-primary bg-opacity-90 fixed transition-transform duration-500 p-6 ${mobileNavOpen ? "transform-none" : "-translate-x-full"}`}>
+            <div className={`h-full lg:hidden md:hidden w-64 bg-primary bg-opacity-40 fixed text-white backdrop-blur transition-transform duration-500 p-6 ${mobileNavOpen ? "transform-none" : "-translate-x-full"}`}>
                 {/* Side Nav Content */}
                 <button onClick={mobileNavToggle} className="block md:hidden ml-auto lg:hidden">
                     <CloseIcon className="text-danger-300" />
                 </button>
+
+                {/* logo */}
+                <div className="flex items-center gap-2">
+                    <div>
+                        <img className="bg-white rounded-full h-10 w-10 " src={logo} alt="logo" />
+                    </div>
+                    <div className="font-poppins text-3xl">VoteEase</div>
+                </div>
+                {/* profile */}
+                <div className=" mt-10">
+                    <User
+                        name="Jane Doe"
+                        description="Product Designer"
+                        avatarProps={{
+                            src: "https://i.pravatar.cc/150?u=a04258114e29026702d"
+                        }}
+                    ></User>
+                </div>
+                {/* Side Nav Content */}
+                <ul className="mt-10">
+                    <Link className=" " to="">               
+                         <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
+                            <DashboardIcon className="h-6 w-6"/>
+                            Dashboard
+                            </li>
+                    </Link>
+                    <Link className=" " to="">               
+                         <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
+                            <EventIcon className="h-6 w-6"/>
+                            Events
+                            </li>
+                    </Link>
+                    <Link className=" " to="">               
+                         <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
+                            <CategoryIcon className="h-6 w-6"/>
+                            Categories
+                            </li>
+                    </Link>
+                    <Link className=" " to="">               
+                         <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
+                            <EditionIcon className="h-6 w-6"/>
+                            Edition/Year
+                            </li>
+                    </Link>
+                    <Link className=" " to="">               
+                         <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
+                            <UserIcon className="h-6 w-6"/>
+                            Contestant
+                            </li>
+                    </Link>
+                    <Link className=" " to="">               
+                         <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
+                            <ResultIcon className="h-6 w-6"/>
+                            Results
+                            </li>
+                    </Link>
+                </ul>
             </div>
 
 
             {/* Page Content */}
-            <div className={`p-4 transition-all duration-500 ${desktopNav ? "lg:ml-64 md:ml-64" : "ml-0"}`}>
+            <div className={`p-4 transition-all duration-500 overflow-x-hidden ${desktopNav ? "lg:ml-64 md:ml-64" : ""}`}>
                 {/* Top Nav */}
                 <div className="h-16 rounded-2xl w-full bg-primary px-6 flex items-center justify-between">
                     {/* Overview */}
@@ -120,7 +178,7 @@ const AdminLayout = ({ children, pageName }: { children: ReactNode; pageName: st
                         <button>
                             <LogoutIcon className="text-danger-300" />
                         </button>
-                        <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+                        <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
                             {theme === "light" ? (
                                 <SunIcon className="text-white" />
                             ) : (
