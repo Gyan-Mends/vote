@@ -2,8 +2,11 @@ import { Button, Checkbox, Input } from "@nextui-org/react"
 import { ActionFunction } from "@remix-run/node";
 import { Form, Link } from "@remix-run/react";
 import { useTheme } from "next-themes"
-import { useState } from "react";
 import illustration from "~/components/illustration/Voting-amico-removebg.png"
+import MoonIcon from "~/components/icons/MoonIcon";
+import SunIcon from "~/components/icons/SunIcon";
+import { loginController } from "~/components/controller";
+import { getSession } from "~/session";
 
 const Login = () => {
     const { theme, setTheme } = useTheme();
@@ -21,7 +24,18 @@ const Login = () => {
                             setTheme(theme === "dark" ? "light" : "dark");
                         }}
                     >
-                        {theme === "dark" ? "DarkMode" : "LightMode"}
+                        {
+                            theme === "light" ? (
+                                <>
+                                    <SunIcon className=""/>
+
+                                </>
+                            ) : (
+                                <>
+                                <MoonIcon className="text-slate-950"/>
+                                </>
+                            )
+                        }
                     </Button>
                 </div>
                 <h1 className="font-poppins font-bold text-6xl " >Login To</h1>
@@ -57,7 +71,7 @@ const Login = () => {
                         </div>
 
                     </div>
-                    <button className={`h-12 w-full lg:w-[28vw] font-poppins text-xl mt-6 bg-primary rounded-lg`} >
+                    <button className={`text-white h-12 w-full lg:w-[28vw] font-poppins text-xl mt-6 bg-primary rounded-lg`} >
                         Login
                     </button>
 
@@ -82,12 +96,19 @@ const Login = () => {
 
 export default Login
 
-export const action:ActionFunction = async ({request}) => {
+export const action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
     const email = formData.get("email");
     const password = formData.get("password")
 
-    console.log(email, password);
+    try {
+        // session
+        const session = await getSession(request.headers.get("Cookie"));
+        const token = session.get("email")
+
+        const LoginController  = await loginController(email:token, password);
+    } catch (error) {
+        
+    }
     
-    return true
 }

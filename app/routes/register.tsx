@@ -4,7 +4,7 @@ import { Form, Link, useActionData } from "@remix-run/react";
 import { useTheme } from "next-themes";
 import { Toaster } from 'react-hot-toast';
 import illustration from "~/components/illustration/Voting-amico-removebg.png";
-import { saveRegistration } from "~/components/contrller";
+import { saveRegistration } from "~/components/controller";
 import SunIcon from "~/components/icons/SunIcon";
 
 
