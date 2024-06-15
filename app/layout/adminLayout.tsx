@@ -51,13 +51,13 @@ const AdminLayout = ({ children, pageName }: { children: ReactNode; pageName: st
                 </div>
                 {/* Side Nav Content */}
                 <ul className="mt-10">
-                    <Link className=" " to="">               
+                    <Link className="" to="/admin">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <DashboardIcon className="h-6 w-6"/>
                             Dashboard
                             </li>
                     </Link>
-                    <Link className=" " to="">               
+                    <Link className=" " to="/events">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <EventIcon className="h-6 w-6"/>
                             Events
@@ -116,13 +116,13 @@ const AdminLayout = ({ children, pageName }: { children: ReactNode; pageName: st
                 </div>
                 {/* Side Nav Content */}
                 <ul className="mt-10">
-                    <Link className=" " to="">               
+                    <Link className=" " to="/admin">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <DashboardIcon className="h-6 w-6"/>
                             Dashboard
                             </li>
                     </Link>
-                    <Link className=" " to="">               
+                    <Link className=" " to="/events">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <EventIcon className="h-6 w-6"/>
                             Events
