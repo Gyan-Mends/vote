@@ -38,7 +38,7 @@ const Login = () => {
                     <Button
                         className={`transition duration-500 absolute z-10 top-0 left-0 mt-4 ml-2 ${theme === "dark" ? "bg-primary-500" : "bg-primary-500 text-white"}`}
                         onPress={() => {
-                            setTheme(theme === "dark" ? "light" : "dark");
+                            setTheme(theme === "light" ? "dark" : "light");
                         }}
                     >
                         {

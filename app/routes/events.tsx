@@ -7,6 +7,9 @@ import { Form, Link } from "@remix-run/react";
 import CreateModal from "~/components/modal/createModal";
 import { LockIcon } from "~/components/icons/LockIcon";
 import { MailIcon } from "~/components/icons/MailIcon";
+import { ActionFunction, LoaderFunction, json, redirect } from "@remix-run/node";
+import { getSession } from "~/session";
+import Events from "~/modal/events";
 
 const Event = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -35,7 +38,7 @@ const Event = () => {
         <AdminLayout pageName="Events">
             <div className="flex justify-between mb-4">
                 <div>
-                    <Input 
+                    <Input
                         classNames={{
                             inputWrapper: "lg:w-96 h-12",
                         }}
@@ -48,20 +51,32 @@ const Event = () => {
                             <Form method="post" className="flex flex-col gap-4">
                                 <Input
                                     autoFocus
-                                    endContent={
-                                        <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                                    }
-                                    label="Email"
+                                    label="Name"
+                                    placeholder="Enter your email"
+                                    variant="bordered"
+                                    name="name"
+                                />
+                                <Input
+                                    autoFocus
+                                    label="Type"
+                                    placeholder="Enter your email"
+                                    variant="bordered"
+                                    name="type"
+                                />
+                                <Input
+                                    autoFocus
+                                    label="Description"
                                     placeholder="Enter your email"
                                     variant="bordered"
                                 />
+                                <input name="logo" type="file" />
                                 <div className="flex justify-end gap-2">
                                     <Button color="danger" variant="flat" onPress={onClose}>
                                         Close
                                     </Button>
-                                    <Button color="primary" >
+                                    <button color="primary" >
                                         Submit
-                                    </Button>
+                                    </button>
                                 </div>
                             </Form>
                         )}
@@ -90,3 +105,47 @@ const Event = () => {
 };
 
 export default Event;
+
+// loader function
+export const loader: LoaderFunction = async ({ request }) => {
+    const session = await getSession(request.headers.get("Cookie"));
+    const token = session.get("email");
+
+    if (!token) {
+        return redirect("/login");
+    }
+
+    return true
+}
+
+export const action: ActionFunction = async ({ request }) => {
+    const formData = await request.formData();
+    const name = formData.get("name") as string;
+    const type = formData.get("type") as string;
+    const description = formData.get("description") as string;
+    const logo = formData.get("logo") as string;
+
+    console.log(name, type, description, logo);
+    
+
+    // Check if event exists
+    try {
+        const newEvent = new Events({
+            name,
+            type,
+            description,
+            logo
+        });
+
+        const response = await newEvent.save();
+
+        if (response) {
+            return json({ message: "Event created successfully", success: true }, { status: 200 });
+        }else{
+            return json({ message: "An error occurred", success: false }, { status: 500 });
+        }
+    } catch (error) {
+        console.error(error);
+        return redirect("/events");
+    }
+}

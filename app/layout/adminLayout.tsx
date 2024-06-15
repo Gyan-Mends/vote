@@ -15,7 +15,12 @@ import SunIcon from "~/components/icons/SunIcon";
 import UserIcon from "~/components/icons/UserIcon";
 import logo from "~/components/illustration/logo.png"
 
-const AdminLayout = ({ children, pageName }: { children: ReactNode; pageName: string }) => {
+interface AdminLayoutProps {
+    children:  ReactNode;
+    pageName: string;
+}
+
+const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
     const { theme, setTheme } = useTheme();
     const [desktopNav, setDesktopNav] = useState(true);
     const [mobileNavOpen, setMobileNavOpen] = useState(false); // Hide mobile nav by default
