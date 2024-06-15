@@ -91,7 +91,7 @@ const AdminLayout = ({ children, pageName }: { children: ReactNode; pageName: st
             </div>
 
             {/* Mobile Side Navigation Bar */}
-            <div className={`h-full lg:hidden md:hidden w-64 bg-primary bg-opacity-40 fixed text-white backdrop-blur transition-transform duration-500 p-6 ${mobileNavOpen ? "transform-none" : "-translate-x-full"}`}>
+            <div className={`h-full lg:hidden absolute md:hidden w-64 bg-primary bg-opacity-40 fixed text-white backdrop-blur transition-transform duration-500 p-6 ${mobileNavOpen ? "transform-none" : "-translate-x-full"}`}>
                 {/* Side Nav Content */}
                 <button onClick={mobileNavToggle} className="block md:hidden ml-auto lg:hidden">
                     <CloseIcon className="text-danger-300" />

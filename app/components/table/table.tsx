@@ -1,5 +1,6 @@
 import React, { ReactNode, useState } from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Input, Button } from "@nextui-org/react";
+import { Link } from "@remix-run/react";
 
 interface Column {
     key: string;
@@ -25,7 +26,8 @@ export default function CustomTable({ columns, children, rowsPerPage, onRowsPerP
 
     return (
         <div>
-            <Table aria-label="Example table with custom cells">
+            
+            <Table className="mt-6" aria-label="Example table with custom cells">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.key}>{column.label}</TableColumn>
@@ -35,23 +37,24 @@ export default function CustomTable({ columns, children, rowsPerPage, onRowsPerP
                     {currentData}
                 </TableBody>
             </Table>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="flex items-center justify-between mt-4">
                 <Pagination
+                    className="font-poppins"
                     total={totalPages}
                     initialPage={1}
                     onChange={(page) => handlePageChange(page)}
                     currentPage={currentPage}
                 />
-                <div>
-                    Rows per page: 
+                <div className="font-poppins">
+                    Rows per page:
                     <select
+                        className="rounded-lg outline-none w-12 p-1 text-white bg-primary"
                         value={rowsPerPage}
                         onChange={(e) => onRowsPerPageChange(Number(e.target.value))}
                     >
                         <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={15}>15</option>
-                        <option value={20}>20</option>
+                        <option value={9}>9</option>
+
                     </select>
                 </div>
             </div>
