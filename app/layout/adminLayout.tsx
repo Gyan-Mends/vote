@@ -62,13 +62,13 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
                             Dashboard
                             </li>
                     </Link>
-                    <Link className=" " to="/events">               
+                    <Link className=" " to="/admin/events">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <EventIcon className="h-6 w-6"/>
                             Events
                             </li>
                     </Link>
-                    <Link className=" " to="">               
+                    <Link className=" " to="/admin/category">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <CategoryIcon className="h-6 w-6"/>
                             Categories
@@ -96,7 +96,7 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
             </div>
 
             {/* Mobile Side Navigation Bar */}
-            <div className={`h-full lg:hidden absolute md:hidden w-64 bg-primary bg-opacity-40 fixed text-white backdrop-blur transition-transform duration-500 p-6 ${mobileNavOpen ? "transform-none" : "-translate-x-full"}`}>
+            <div className={`h-full lg:hidden top-0 left-0 z-index-100 absolute md:hidden w-64 bg-primary bg-opacity-40 fixed text-white backdrop-blur transition-transform duration-500 p-6 ${mobileNavOpen ? "transform-none" : "-translate-x-full"}`}>
                 {/* Side Nav Content */}
                 <button onClick={mobileNavToggle} className="block md:hidden ml-auto lg:hidden">
                     <CloseIcon className="text-danger-300" />
@@ -127,13 +127,13 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
                             Dashboard
                             </li>
                     </Link>
-                    <Link className=" " to="/events">               
+                    <Link className=" " to="admin/events/$">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <EventIcon className="h-6 w-6"/>
                             Events
                             </li>
                     </Link>
-                    <Link className=" " to="">               
+                    <Link className=" " to="/admin/category">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <CategoryIcon className="h-6 w-6"/>
                             Categories
@@ -162,7 +162,7 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
 
 
             {/* Page Content */}
-            <div className={`p-4 transition-all duration-500 overflow-x-hidden ${desktopNav ? "lg:ml-64 md:ml-64" : ""}`}>
+            <div className={`p-4 transition-all duration-500 overflow-x-hidden z-1 ${desktopNav ? "lg:ml-64 md:ml-64" : ""}`}>
                 {/* Top Nav */}
                 <div className="h-16 rounded-2xl w-full bg-primary px-6 flex items-center justify-between">
                     {/* Overview */}

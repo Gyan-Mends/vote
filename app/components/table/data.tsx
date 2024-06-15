@@ -6,12 +6,14 @@ export const EventColumns = [
     { key: "action", label: "Action" },
     // Add more columns as needed
 ];
-
-export const productColumns = [
-    { key: "productName", label: "Product Name" },
-    { key: "price", label: "Price" },
+export const CategoryColumns = [
+    { key: "event", label: "Event" },
     { key: "category", label: "Category" },
+    { key: "description", label: "Description" },
+    { key: "action", label: "Action" },
     // Add more columns as needed
 ];
+
+
 
 // You can define and export other column configurations as needed

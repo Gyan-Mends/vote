@@ -5,8 +5,6 @@ import UserIcon from '~/components/icons/UserIcon';
 import EditionIcon from '~/components/icons/EditionIcon';
 import CategoryIcon from '~/components/icons/CategoryIcon';
 import EventIcon from '~/components/icons/EventsIcon';
-import { LoaderFunction, redirect } from '@remix-run/node';
-import { getSession } from '~/session';
 
 const Admin = () => {
     const [loading, setLoading] = useState(true);
@@ -169,15 +167,3 @@ const Admin = () => {
 };
 
 export default Admin;
-
-// loader function
-export const loader:LoaderFunction =async ({request}) => {
-    const session = await getSession(request.headers.get("Cookie"));
-    const token = session.get("email");
-
-    if (!token) {
-        return redirect("/login");
-    }
-
-    return true
-}

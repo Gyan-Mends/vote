@@ -7,3 +7,10 @@ export interface EventInterface {
     email:string;
     logo: string;
 }
+
+export interface CategoryInterface {
+    event: string;
+    category:string;
+    description: string;
+    email:string;
+}

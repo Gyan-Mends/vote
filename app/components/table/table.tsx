@@ -53,7 +53,7 @@ export default function CustomTable({ columns, children, rowsPerPage, onRowsPerP
                         onChange={(e) => onRowsPerPageChange(Number(e.target.value))}
                     >
                         <option value={5}>5</option>
-                        <option value={9}>9</option>
+                        <option value={7}>7</option>
 
                     </select>
                 </div>
