@@ -27,7 +27,7 @@ export default function CustomTable({ columns, children, rowsPerPage, onRowsPerP
     return (
         <div>
             
-            <Table className="mt-6" aria-label="Example table with custom cells">
+            <Table className="mt-6 text-poppins" aria-label="Example table with custom cells">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.key}>{column.label}</TableColumn>

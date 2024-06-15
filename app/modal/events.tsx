@@ -1,28 +1,26 @@
 import mongoose from "~/mongoose.server";
-
-interface EventInterface {
-    name: string;
-    type:string;
-    description: string;
-    logo: string;
-}
+import { EventInterface } from "./interface";
 
 const EventSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        require: true,
+    },
+    email: {
+        type: String,
+        require: true,
     },
     type: {
         type: String,
-        required: true,
+        require: true,
     },
     description: {
         type: String,
-        required: true,
+        require: true,
     },
     logo: {
         type: String,
-        required: true,
+        require: true,
     },
     },{
     timestamps: true,

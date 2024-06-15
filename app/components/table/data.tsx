@@ -1,8 +1,9 @@
 // columns.js
-export const userColumns = [
+export const EventColumns = [
     { key: "name", label: "Name" },
-    { key: "status", label: "Status" },
-    { key: "role", label: "Role" },
+    { key: "description", label: "Description" },
+    { key: "type", label: "Type" },
+    { key: "action", label: "Action" },
     // Add more columns as needed
 ];
 
