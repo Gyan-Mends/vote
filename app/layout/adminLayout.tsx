@@ -74,7 +74,7 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
                             Categories
                             </li>
                     </Link>
-                    <Link className=" " to="">               
+                    <Link className=" " to="/admin/edition">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <EditionIcon className="h-6 w-6"/>
                             Edition/Year
@@ -139,7 +139,7 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
                             Categories
                             </li>
                     </Link>
-                    <Link className=" " to="">               
+                    <Link className=" " to="/admin/edition">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <EditionIcon className="h-6 w-6"/>
                             Edition/Year

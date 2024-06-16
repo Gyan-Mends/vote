@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CustomTable from "~/components/table/table";
 import AdminLayout from "~/layout/adminLayout";
-import { EventColumns, productColumns } from "~/components/table/data";
+import { EventColumns } from "~/components/table/data";
 import { TableRow, TableCell, User, Chip, Input, Button, Checkbox, Textarea, Tooltip } from "@nextui-org/react";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import CreateModal from "~/components/modal/createModal";
-import { LockIcon } from "~/components/icons/LockIcon";
-import { MailIcon } from "~/components/icons/MailIcon";
 import { ActionFunction, LoaderFunction, json, redirect } from "@remix-run/node";
 import { getSession } from "~/session";
 import Events from "~/modal/events";

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CustomTable from "~/components/table/table";
 import AdminLayout from "~/layout/adminLayout";
-import { CategoryColumns } from "~/components/table/data";
+import { EditionColumns } from "~/components/table/data";
 import { TableRow, TableCell, User, Chip, Input, Button, Checkbox, Textarea, Tooltip, Avatar, SelectItem, Select } from "@nextui-org/react";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import CreateModal from "~/components/modal/createModal";
 import { ActionFunction, LoaderFunction, json, redirect } from "@remix-run/node";
 import { getSession } from "~/session";
-import { CategoryInterface, EventInterface } from "~/modal/interface";
+import { CategoryInterface, EditionInterface, EventInterface } from "~/modal/interface";
 import { EyeIcon } from "~/components/icons/EyeIcon";
 import { EditIcon } from "~/components/icons/EditIcon";
 import { DeleteIcon } from "~/components/icons/DeleteIcon";
@@ -15,13 +15,15 @@ import { Toaster } from "react-hot-toast";
 import { errorToast, successToast } from "~/components/toast";
 import Categories from "~/modal/category";
 import Events from "~/modal/events";
+import Edition from "~/modal/edition";
 
 
 const Category = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const { token } = useLoaderData<{ token: string }>()
     const { event } = useLoaderData<{ event: EventInterface[] }>()
-    const {category}=useLoaderData<{category: CategoryInterface[]}>()
+    const { edition } = useLoaderData<{ edition: EditionInterface[] }>()
+    const [base64Image, setBase64Image] = useState('');
     const actionData = useActionData<any>()
 
     useEffect(() => {
@@ -34,13 +36,24 @@ const Category = () => {
         }
     }, [actionData]);
 
+    const handleImageChange = (event: any) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setBase64Image(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
 
     const handleRowsPerPageChange = (newRowsPerPage: number) => {
         setRowsPerPage(newRowsPerPage);
     };
 
     return (
-        <AdminLayout pageName="Categories">
+        <AdminLayout pageName="Contestants">
             <div className="relative z-0">
                 <Toaster position="top-center" />
 
@@ -54,7 +67,7 @@ const Category = () => {
                         />
                     </div>
                     <div>
-                        <CreateModal className="" name="Create Category" modalTitle="Create New Category">
+                        <CreateModal className="" name="Create Edition" modalTitle="Create New Edition">
                             {(onClose) => (
                                 <Form method="post" className="flex flex-col gap-4">
                                     <Select
@@ -79,10 +92,18 @@ const Category = () => {
 
                                     <Input
                                         autoFocus
-                                        label="Category"
-                                        placeholder="Perfect Gentilman"
+                                        label="name"
+                                        placeholder="Golden Edition || 2024"
                                         variant="bordered"
-                                        name="category"
+                                        name="name"
+                                    />
+
+                                    <Input
+                                        autoFocus
+                                        label="price"
+                                        placeholder="GHC1 per vote"
+                                        variant="bordered"
+                                        name="price"
                                     />
                                     <Textarea
                                         autoFocus
@@ -91,7 +112,19 @@ const Category = () => {
                                         variant="bordered"
                                         name="description"
                                     />
+                                    <input
+                                        name="logo"
+                                        type="file"
+                                        className="border border-gray-500 border-2 h-12 rounded-lg"
+                                        onChange={handleImageChange}
+                                    />
+                                    {base64Image && (
+                                        <div className="mt-4">
+                                            <img src={base64Image} alt="Selected" className="w-26 rounded-lg h-40 bg-slate-800" />
+                                        </div>
+                                    )}
 
+                                    <input type="hidden" name="base64Image" value={base64Image} />
                                     <input hidden type="" name="email" value={token} />
 
                                     <div className="flex justify-end gap-2">
@@ -107,16 +140,22 @@ const Category = () => {
                         </CreateModal>
                     </div>
                 </div>
-                <CustomTable columns={CategoryColumns} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleRowsPerPageChange}>
-                    {category.map((categories: CategoryInterface, index: number) => (
+                <CustomTable columns={EditionColumns} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleRowsPerPageChange}>
+                    {edition.map((editions: EditionInterface, index: number) => (
                         <TableRow key={index}>
-                            <TableCell> 
-                                {categories.event}
+                            <TableCell>
+                            <User
+                                    avatarProps={{ radius: "lg", src: editions.logo }}
+                                    name={editions.name}
+                                />
                             </TableCell>
                             <TableCell>
-                                {categories.category}
+                                {editions.event}
                             </TableCell>
-                            <TableCell>{categories.description}</TableCell>
+                            <TableCell>
+                                {editions.price}
+                            </TableCell>
+                            <TableCell>{editions.description}</TableCell>
                             <TableCell className="relative flex items-center gap-4">
                                 <Tooltip content="Details">
                                     <span className="text-lg text-primary-400 cursor-pointer active:opacity-50">
@@ -130,7 +169,7 @@ const Category = () => {
                                 </Tooltip>
                                 <Tooltip color="danger" content="Delete user">
                                     <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                        <Link to={`${categories._id}`}>
+                                        <Link to={`${editions._id}`}>
                                             <DeleteIcon />
                                         </Link>
                                     </span>
@@ -159,25 +198,29 @@ export const loader: LoaderFunction = async ({ request }) => {
     // events to populate select
     const event = await Events.find({ email: token })
     // categories to populate the table
-    const category = await Categories.find({ email: token })
+    const edition = await Edition.find({ email: token })
 
 
-    return { token, event, category }
+    return { token, event, edition }
 }
 
 export const action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
     const event = formData.get("event") as string;
-    const category = formData.get("category") as string;
+    const name = formData.get("name") as string;
+    const price = formData.get("price") as string;
     const description = formData.get("description") as string;
+    const base64Image = formData.get("base64Image") as string; // Handle file upload properly
     const email = formData.get("email")
 
     // Check if event exists
     try {
-        const newEvent = new Categories({
+        const newEvent = new Edition({
             event,
-            category,
+            price,
+            name,
             description,
+            logo: base64Image,
             email
         });
 
