@@ -18,6 +18,16 @@ export const EditionColumns = [
     { key: "event", label: "Event" },
     { key: "price", label: "Price" },
     { key: "description", label: "Description" },
+    {key:"status", label:"Status"},
+    { key: "action", label: "Action" },
+    // Add more columns as needed
+];
+export const ContestantColumns = [
+    { key: "name", label: "Name" },
+    { key: "code", label: "Code" },
+    { key: "event", label: "Event" },
+    { key: "edition", label: "Edition" },
+    { key: "nomination", label: "Nomination" },
     { key: "action", label: "Action" },
     // Add more columns as needed
 ];

@@ -24,5 +24,16 @@ export interface EditionInterface {
     description: string;
     price:number;
     email:string;
-    logo:string
+    logo:string;
+    status:string;
+}
+export interface ContestantInterface {
+    _id : string
+    event: string;
+    edition:string;
+    nomination:string;
+    name:string;
+    code:string;
+    image:string;
+    email:string;
 }

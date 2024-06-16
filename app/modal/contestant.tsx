@@ -1,16 +1,16 @@
 import mongoose from "~/mongoose.server";
-import { EditionInterface } from "./interface";
+import { ContestantInterface } from "./interface";
 
-const EditionSchema = new mongoose.Schema({
+const ContestantSchema = new mongoose.Schema({
     event: {
         type: String,
         require: true,
     },
-    logo: {
+    edition: {
         type: String,
         require: true,
     },
-    email: {
+    nomination: {
         type: String,
         require: true,
     },
@@ -18,30 +18,29 @@ const EditionSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
-    description: {
+    email: {
         type: String,
         require: true,
     },
-    price: {
+    code: {
         type: String,
         require: true,
     },
-    status: {
+    image: {
         type: String,
         require: true,
-        enum: ['Opened', 'Closed'], 
-        default: 'Closed' 
     },
+   
     },{
     timestamps: true,
     });
 
-let Edition: mongoose.Model<EditionInterface>;
+let Contestant: mongoose.Model<ContestantInterface>;
 
 try {
-    Edition = mongoose.model<EditionInterface>("Edition");
+    Contestant = mongoose.model<ContestantInterface>("Contestant");
 } catch (error) {
-    Edition = mongoose.model<EditionInterface>("Edition", EditionSchema);
+    Contestant = mongoose.model<ContestantInterface>("Contestant", ContestantSchema);
 }
 
-export default Edition;
+export default Contestant;

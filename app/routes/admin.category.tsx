@@ -21,7 +21,7 @@ const Category = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const { token } = useLoaderData<{ token: string }>()
     const { event } = useLoaderData<{ event: EventInterface[] }>()
-    const {category}=useLoaderData<{category: CategoryInterface[]}>()
+    const { category } = useLoaderData<{ category: CategoryInterface[] }>()
     const actionData = useActionData<any>()
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const Category = () => {
     };
 
     return (
-        <AdminLayout pageName="Categories">
+        <AdminLayout pageName="Nominations">
             <div className="relative z-0">
                 <Toaster position="top-center" />
 
@@ -54,7 +54,7 @@ const Category = () => {
                         />
                     </div>
                     <div>
-                        <CreateModal className="" name="Create Category" modalTitle="Create New Category">
+                        <CreateModal className="" name="Create Nomination" modalTitle="Create New Nomination">
                             {(onClose) => (
                                 <Form method="post" className="flex flex-col gap-4">
                                     <Select
@@ -63,6 +63,7 @@ const Category = () => {
                                         placeholder="Select a event"
                                         variant="bordered"
                                         name="event"
+                                        isRequired
                                     >
                                         {(event) => (
                                             <SelectItem key={event.name} textValue={event.name}>
@@ -79,10 +80,11 @@ const Category = () => {
 
                                     <Input
                                         autoFocus
-                                        label="Category"
+                                        label="Nomination"
                                         placeholder="Perfect Gentilman"
                                         variant="bordered"
                                         name="category"
+                                        isRequired
                                     />
                                     <Textarea
                                         autoFocus
@@ -110,8 +112,11 @@ const Category = () => {
                 <CustomTable columns={CategoryColumns} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleRowsPerPageChange}>
                     {category.map((categories: CategoryInterface, index: number) => (
                         <TableRow key={index}>
-                            <TableCell> 
-                                {categories.event}
+                            <TableCell>
+                                <User
+                                    avatarProps={{ radius: "lg", src: categories.category }}
+                                    name={categories.event}
+                                />
                             </TableCell>
                             <TableCell>
                                 {categories.category}
@@ -171,23 +176,33 @@ export const action: ActionFunction = async ({ request }) => {
     const category = formData.get("category") as string;
     const description = formData.get("description") as string;
     const email = formData.get("email")
+    const session = await getSession(request.headers.get("Cookie"));
+    const token = session.get("email");
 
-    // Check if event exists
     try {
-        const newEvent = new Categories({
-            event,
-            category,
-            description,
-            email
-        });
+        // check if event exist before nominations can be added
+        const eventExistanceCheck = await Events.findOne({ email: token, name: event })
 
-        const response = await newEvent.save();
+        if (eventExistanceCheck) {
+            const newEvent = new Categories({
+                event,
+                category,
+                description,
+                email
+            });
 
-        if (response) {
-            return json({ message: "Event created successfully", success: true }, { status: 200 });
+            const response = await newEvent.save();
+
+            if (response) {
+                return json({ message: "Event created successfully", success: true }, { status: 200 });
+            } else {
+                return json({ message: "An error occurred", success: false }, { status: 500 });
+            }
         } else {
-            return json({ message: "An error occurred", success: false }, { status: 500 });
+            return json({ message: "Event must be created before you can add nominations", success: false }, { status: 200 });
+
         }
+
     } catch (error) {
         console.error(error);
         return redirect("/events");

@@ -71,7 +71,7 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
                     <Link className=" " to="/admin/category">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <CategoryIcon className="h-6 w-6"/>
-                            Categories
+                            Nomination
                             </li>
                     </Link>
                     <Link className=" " to="/admin/edition">               
@@ -80,7 +80,7 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
                             Edition/Year
                             </li>
                     </Link>
-                    <Link className=" " to="">               
+                    <Link className=" " to="/admin/contestants">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <UserIcon className="h-6 w-6"/>
                             Contestant
@@ -136,7 +136,7 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
                     <Link className=" " to="/admin/category">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <CategoryIcon className="h-6 w-6"/>
-                            Categories
+                            Nominations
                             </li>
                     </Link>
                     <Link className=" " to="/admin/edition">               
@@ -145,7 +145,7 @@ const AdminLayout = ({ children, pageName }: AdminLayoutProps) => {
                             Edition/Year
                             </li>
                     </Link>
-                    <Link className=" " to="">               
+                    <Link className=" " to="/admin/contestants">               
                          <li className="hover:bg-primary-400 text-lg font-poppins p-2 rounded-lg flex gap-2">
                             <UserIcon className="h-6 w-6"/>
                             Contestant

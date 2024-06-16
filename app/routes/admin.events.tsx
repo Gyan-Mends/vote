@@ -73,13 +73,15 @@ const Event = () => {
                                         placeholder="Enter your event name"
                                         variant="bordered"
                                         name="name"
+                                        isRequired
                                     />
                                     <Input
                                         autoFocus
                                         label="Type"
-                                        placeholder="Enter your event type"
+                                        placeholder="Award"
                                         variant="bordered"
                                         name="type"
+                                        isRequired
                                     />
                                     <Textarea
                                         autoFocus
@@ -92,6 +94,7 @@ const Event = () => {
                                         type="file"
                                         className="border border-gray-500 border-2 h-12 rounded-lg"
                                         onChange={handleImageChange}
+                                        required
                                     />
                                     {base64Image && (
                                         <div className="mt-4">
@@ -158,11 +161,10 @@ const Event = () => {
 export default Event;
 
 // loader function
-export const loader: LoaderFunction = async ({ request,params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
     const session = await getSession(request.headers.get("Cookie"));
     const token = session.get("email");
-    console.log(token);
-    
+
 
     if (!token) {
         return redirect("/login");
@@ -174,6 +176,8 @@ export const loader: LoaderFunction = async ({ request,params }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+    const session = await getSession(request.headers.get("Cookie"));
+    const token = session.get("email");
     const formData = await request.formData();
     const name = formData.get("name") as string;
     const type = formData.get("type") as string;
@@ -181,8 +185,13 @@ export const action: ActionFunction = async ({ request }) => {
     const base64Image = formData.get("base64Image") as string; // Handle file upload properly
     const email = formData.get("email")
 
-    // Check if event exists
     try {
+        // Check if event exists
+        const eventExist = await Events.findOne({ email: token, name: name })
+        if (eventExist) {
+            return json({ message: "Event already exist", success: false }, { status: 200 })
+        }
+        
         const newEvent = new Events({
             name,
             type,

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CustomTable from "~/components/table/table";
 import AdminLayout from "~/layout/adminLayout";
-import { EditionColumns } from "~/components/table/data";
+import { ContestantColumns } from "~/components/table/data";
 import { TableRow, TableCell, User, Chip, Input, Button, Checkbox, Textarea, Tooltip, Avatar, SelectItem, Select } from "@nextui-org/react";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import CreateModal from "~/components/modal/createModal";
 import { ActionFunction, LoaderFunction, json, redirect } from "@remix-run/node";
 import { getSession } from "~/session";
-import { CategoryInterface, EditionInterface, EventInterface } from "~/modal/interface";
+import { CategoryInterface, ContestantInterface, EditionInterface, EventInterface } from "~/modal/interface";
 import { EyeIcon } from "~/components/icons/EyeIcon";
 import { EditIcon } from "~/components/icons/EditIcon";
 import { DeleteIcon } from "~/components/icons/DeleteIcon";
@@ -16,6 +16,7 @@ import { errorToast, successToast } from "~/components/toast";
 import Categories from "~/modal/category";
 import Events from "~/modal/events";
 import Edition from "~/modal/edition";
+import Contestant from "~/modal/contestant";
 
 
 const Category = () => {
@@ -23,6 +24,8 @@ const Category = () => {
     const { token } = useLoaderData<{ token: string }>()
     const { event } = useLoaderData<{ event: EventInterface[] }>()
     const { edition } = useLoaderData<{ edition: EditionInterface[] }>()
+    const { category } = useLoaderData<{ category: CategoryInterface[] }>()
+    const {contestant} = useLoaderData<{contestant:ContestantInterface[]}>()
     const [base64Image, setBase64Image] = useState('');
     const actionData = useActionData<any>()
 
@@ -67,7 +70,7 @@ const Category = () => {
                         />
                     </div>
                     <div>
-                        <CreateModal className="" name="Create Edition" modalTitle="Create New Edition">
+                        <CreateModal className="" name="Create Contestant" modalTitle="Create New Contestant">
                             {(onClose) => (
                                 <Form method="post" className="flex flex-col gap-4">
                                     <Select
@@ -76,6 +79,7 @@ const Category = () => {
                                         placeholder="Select a event"
                                         variant="bordered"
                                         name="event"
+                                        isRequired
                                     >
                                         {(event) => (
                                             <SelectItem key={event.name} textValue={event.name}>
@@ -89,29 +93,63 @@ const Category = () => {
                                         )}
                                     </Select>
 
+                                    <Select
+                                        items={edition}
+                                        label="Edition"
+                                        placeholder="Select a edition"
+                                        variant="bordered"
+                                        name="edition"
+                                        isRequired
+                                    >
+                                        {(edition) => (
+                                            <SelectItem key={edition.name} textValue={edition.name}>
+                                                <div className="flex gap-2 items-center">
+                                                    <Avatar alt={edition.name} className="flex-shrink-0" size="sm" src={edition.logo} />
+                                                    <div className="flex flex-col">
+                                                        <span className="text-small">{edition.name}</span>
+                                                    </div>
+                                                </div>
+                                            </SelectItem>
+                                        )}
+                                    </Select>
+
+                                    <Select
+                                        items={category}
+                                        label="Nomination"
+                                        placeholder="Select a nomination"
+                                        variant="bordered"
+                                        name="nomination"
+                                        isRequired
+                                    >
+                                        {(category) => (
+                                            <SelectItem key={category.category} textValue={category.category}>
+                                                <div className="flex gap-2 items-center">
+                                                    <Avatar alt={category.category} className="flex-shrink-0" size="sm" src={category.category} />
+                                                    <div className="flex flex-col">
+                                                        <span className="text-small">{category.category}</span>
+                                                    </div>
+                                                </div>
+                                            </SelectItem>
+                                        )}
+                                    </Select>
+
 
                                     <Input
                                         autoFocus
                                         label="name"
-                                        placeholder="Golden Edition || 2024"
+                                        placeholder="Enter stage name"
                                         variant="bordered"
                                         name="name"
                                     />
 
                                     <Input
                                         autoFocus
-                                        label="price"
-                                        placeholder="GHC1 per vote"
+                                        label="code"
+                                        placeholder=""
                                         variant="bordered"
-                                        name="price"
+                                        name="code"
                                     />
-                                    <Textarea
-                                        autoFocus
-                                        label="Description"
-                                        placeholder="what the nomination is about"
-                                        variant="bordered"
-                                        name="description"
-                                    />
+
                                     <input
                                         name="logo"
                                         type="file"
@@ -125,7 +163,7 @@ const Category = () => {
                                     )}
 
                                     <input type="hidden" name="base64Image" value={base64Image} />
-                                    <input hidden type="" name="email" value={token} />
+                                    <input hidden type="text" name="email" value={token} />
 
                                     <div className="flex justify-end gap-2">
                                         <Button color="danger" variant="flat" onPress={onClose}>
@@ -140,22 +178,25 @@ const Category = () => {
                         </CreateModal>
                     </div>
                 </div>
-                <CustomTable columns={EditionColumns} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleRowsPerPageChange}>
-                    {edition.map((editions: EditionInterface, index: number) => (
+                <CustomTable columns={ContestantColumns} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleRowsPerPageChange}>
+                    {contestant.map((contestants: ContestantInterface, index: number) => (
                         <TableRow key={index}>
                             <TableCell>
-                            <User
-                                    avatarProps={{ radius: "lg", src: editions.logo }}
-                                    name={editions.name}
+                                <User
+                                    avatarProps={{ radius: "lg", src: contestants.image }}
+                                    name={contestants.name}
                                 />
                             </TableCell>
                             <TableCell>
-                                {editions.event}
+                                {contestants.event}
                             </TableCell>
                             <TableCell>
-                                {editions.price}
+                                {contestants.edition}
                             </TableCell>
-                            <TableCell>{editions.description}</TableCell>
+                            <TableCell>
+                                {contestants.nomination}
+                            </TableCell>
+                            <TableCell>{contestants.code}</TableCell>
                             <TableCell className="relative flex items-center gap-4">
                                 <Tooltip content="Details">
                                     <span className="text-lg text-primary-400 cursor-pointer active:opacity-50">
@@ -169,7 +210,7 @@ const Category = () => {
                                 </Tooltip>
                                 <Tooltip color="danger" content="Delete user">
                                     <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                        <Link to={`${editions._id}`}>
+                                        <Link to={`${contestants._id}`}>
                                             <DeleteIcon />
                                         </Link>
                                     </span>
@@ -189,38 +230,52 @@ export default Category;
 export const loader: LoaderFunction = async ({ request }) => {
     const session = await getSession(request.headers.get("Cookie"));
     const token = session.get("email");
-    console.log(token);
 
 
     if (!token) {
         return redirect("/login");
     }
     // events to populate select
-    const event = await Events.find({ email: token })
-    // categories to populate the table
-    const edition = await Edition.find({ email: token })
+    const event = await Events.find({ email: token });
+    // edition to populate the table
+    const edition = await Edition.find({ email: token });
+    //category to populate select
+    const category = await Categories.find({ email: token })
+    // contestants to populate the table
+    const contestant = await Contestant.find({ email: token })
 
 
-    return { token, event, edition }
+
+    return { token, event, edition, category,contestant }
 }
 
 export const action: ActionFunction = async ({ request }) => {
+    const session = await getSession(request.headers.get("Cookie"));
+    const token = session.get("email");
     const formData = await request.formData();
     const event = formData.get("event") as string;
+    const edition = formData.get("edition") as string;
+    const nomination = formData.get("nomination") as string;
     const name = formData.get("name") as string;
-    const price = formData.get("price") as string;
-    const description = formData.get("description") as string;
-    const base64Image = formData.get("base64Image") as string; // Handle file upload properly
-    const email = formData.get("email")
+    const code = formData.get("code") as string;
+    const base64Image = formData.get("base64Image") as string; 
+    const email = formData.get("email") as string;
 
-    // Check if event exists
+    
     try {
-        const newEvent = new Edition({
+        // Check if nomination form is closed or opened
+        const editionStatusCheck = await Edition.find({email:token,status:"Closed",event:event})
+        if(editionStatusCheck){
+            return json({message:"Form is not opened, contact your organizer", success:false},{status:200})
+        }
+
+        const newEvent = new Contestant({
             event,
-            price,
+            edition,
+            nomination,
             name,
-            description,
-            logo: base64Image,
+            code,
+            image: base64Image,
             email
         });
 

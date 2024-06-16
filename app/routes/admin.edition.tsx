@@ -3,7 +3,7 @@ import CustomTable from "~/components/table/table";
 import AdminLayout from "~/layout/adminLayout";
 import { EditionColumns } from "~/components/table/data";
 import { TableRow, TableCell, User, Chip, Input, Button, Checkbox, Textarea, Tooltip, Avatar, SelectItem, Select } from "@nextui-org/react";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import CreateModal from "~/components/modal/createModal";
 import { ActionFunction, LoaderFunction, json, redirect } from "@remix-run/node";
 import { getSession } from "~/session";
@@ -25,10 +25,12 @@ const Category = () => {
     const { edition } = useLoaderData<{ edition: EditionInterface[] }>()
     const [base64Image, setBase64Image] = useState('');
     const actionData = useActionData<any>()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (actionData) {
             if (actionData.success) {
+                navigate("/admin/edition");
                 successToast(actionData.message);
             } else {
                 errorToast(actionData.message);
@@ -156,6 +158,7 @@ const Category = () => {
                                 {editions.price}
                             </TableCell>
                             <TableCell>{editions.description}</TableCell>
+                            <TableCell><Button>{editions.status}</Button></TableCell>
                             <TableCell className="relative flex items-center gap-4">
                                 <Tooltip content="Details">
                                     <span className="text-lg text-primary-400 cursor-pointer active:opacity-50">
