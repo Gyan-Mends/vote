@@ -78,6 +78,7 @@ const Category = () => {
                                         placeholder="Select a event"
                                         variant="bordered"
                                         name="event"
+                                        isRequired
                                     >
                                         {(event) => (
                                             <SelectItem key={event.name} textValue={event.name}>
@@ -98,6 +99,7 @@ const Category = () => {
                                         placeholder="Golden Edition || 2024"
                                         variant="bordered"
                                         name="name"
+                                        isRequired
                                     />
 
                                     <Input
@@ -106,6 +108,7 @@ const Category = () => {
                                         placeholder="GHC1 per vote"
                                         variant="bordered"
                                         name="price"
+                                        isRequired
                                     />
                                     <Textarea
                                         autoFocus
@@ -119,6 +122,7 @@ const Category = () => {
                                         type="file"
                                         className="border border-gray-500 border-2 h-12 rounded-lg"
                                         onChange={handleImageChange}
+                                        required
                                     />
                                     {base64Image && (
                                         <div className="mt-4">
@@ -215,9 +219,16 @@ export const action: ActionFunction = async ({ request }) => {
     const description = formData.get("description") as string;
     const base64Image = formData.get("base64Image") as string; // Handle file upload properly
     const email = formData.get("email")
+    const session = await getSession(request.headers.get("Cookie"));
+    const token = session.get("email");
 
-    // Check if event exists
     try {
+        // check if event exist before nominations can be added
+        const eventExistanceCheck = await Events.findOne({ email: token, name: event })
+
+        if (!eventExistanceCheck) {
+            return json({ message: "Event must be created before you can add edition", success: false }, { status: 200 });
+        }
         const newEvent = new Edition({
             event,
             price,

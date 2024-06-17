@@ -4,8 +4,8 @@ import { Form, Link, useActionData } from "@remix-run/react";
 import { useTheme } from "next-themes";
 import { Toaster } from 'react-hot-toast';
 import illustration from "~/components/illustration/Voting-amico-removebg.png";
-import { saveRegistration } from "~/components/controller";
 import SunIcon from "~/components/icons/SunIcon";
+import registrationService from "~/components/controller";
 
 
 const Login = () => {
@@ -116,7 +116,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 
     try {
-        const response = await saveRegistration(name, email, password);
+        const response = await registrationService.saveRegistration(name, email, password);
         return json({ success: true, message: "Registration successful" }, { status: 200 });
     } catch (error: any) {
         return json({ success: false, message: error.message }, { status: 500 });
